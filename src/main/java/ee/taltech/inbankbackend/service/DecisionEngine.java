@@ -8,6 +8,11 @@ import ee.taltech.inbankbackend.exceptions.InvalidPersonalCodeException;
 import ee.taltech.inbankbackend.exceptions.NoValidLoanException;
 import org.springframework.stereotype.Service;
 
+/**
+ * A service class that provides a method for calculating an approved loan amount and period for a customer.
+ * The loan amount is calculated based on the customer's credit modifier,
+ * which is determined by the last four digits of their ID code.
+ */
 @Service
 public class DecisionEngine {
 
@@ -15,6 +20,21 @@ public class DecisionEngine {
     private final EstonianPersonalCodeValidator validator = new EstonianPersonalCodeValidator();
     private int creditModifier = 0;
 
+    /**
+     * Calculates the maximum loan amount and period for the customer based on their ID code,
+     * the requested loan amount and the loan period.
+     * The loan period must be between 12 and 60 months (inclusive).
+     * The loan amount must be between 2000 and 10000€ months (inclusive).
+     *
+     * @param personalCode ID code of the customer that made the request.
+     * @param loanAmount Requested loan amount
+     * @param loanPeriod Requested loan period
+     * @return A Decision object containing the approved loan amount and period, and an error message (if any)
+     * @throws InvalidPersonalCodeException If the provided personal ID code is invalid
+     * @throws InvalidLoanAmountException If the requested loan amount is invalid
+     * @throws InvalidLoanPeriodException If the requested loan period is invalid
+     * @throws NoValidLoanException If there is no valid loan found for the given ID code, loan amount and loan period
+     */
     public Decision calculateApprovedLoan(Long personalCode, Long loanAmount, int loanPeriod)
             throws InvalidPersonalCodeException, InvalidLoanAmountException, InvalidLoanPeriodException,
             NoValidLoanException {
