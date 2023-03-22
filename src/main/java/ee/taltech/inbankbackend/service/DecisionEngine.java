@@ -35,7 +35,7 @@ public class DecisionEngine {
      * @throws InvalidLoanPeriodException If the requested loan period is invalid
      * @throws NoValidLoanException If there is no valid loan found for the given ID code, loan amount and loan period
      */
-    public Decision calculateApprovedLoan(Long personalCode, Long loanAmount, int loanPeriod)
+    public Decision calculateApprovedLoan(String personalCode, Long loanAmount, int loanPeriod)
             throws InvalidPersonalCodeException, InvalidLoanAmountException, InvalidLoanPeriodException,
             NoValidLoanException {
         try {
@@ -83,15 +83,14 @@ public class DecisionEngine {
      * @param personalCode ID code of the customer that made the request.
      * @return Segment to which the customer belongs.
      */
-    private int getCreditModifier(Long personalCode) {
-        int segmentID = Integer.parseInt(personalCode.toString()
-                .substring(personalCode.toString().length() - 4));
+    private int getCreditModifier(String personalCode) {
+        int segment = Integer.parseInt(personalCode.substring(personalCode.length() - 4));
 
-        if (segmentID < 2500) {
+        if (segment < 2500) {
             return 0;
-        } else if (segmentID < 5000) {
+        } else if (segment < 5000) {
             return DecisionEngineConstants.SEGMENT_1_CREDIT_MODIFIER;
-        } else if (segmentID < 7500) {
+        } else if (segment < 7500) {
             return DecisionEngineConstants.SEGMENT_2_CREDIT_MODIFIER;
         }
 
@@ -109,10 +108,10 @@ public class DecisionEngine {
      * @throws InvalidLoanAmountException If the requested loan amount is invalid
      * @throws InvalidLoanPeriodException If the requested loan period is invalid
      */
-    private void verifyInputs(Long personalCode, Long loanAmount, int loanPeriod)
+    private void verifyInputs(String personalCode, Long loanAmount, int loanPeriod)
             throws InvalidPersonalCodeException, InvalidLoanAmountException, InvalidLoanPeriodException {
 
-        if (!validator.isValid(personalCode.toString())) {
+        if (!validator.isValid(personalCode)) {
             throw new InvalidPersonalCodeException("Invalid personal ID code!");
         }
         if (!(DecisionEngineConstants.MINIMUM_LOAN_AMOUNT <= loanAmount)

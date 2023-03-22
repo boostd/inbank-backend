@@ -42,9 +42,9 @@ The request body must contain the following fields:
 
 ```json
 {
-"personalCode": 12345678901,
-"loanAmount": 5000,
-"loanPeriod": 24
+"personalCode": "50307172740",
+"loanAmount": "5000",
+"loanPeriod": "24"
 }
 ```
 
@@ -58,7 +58,7 @@ The response body contains the following fields:
 
 ```json
 {
-"loanAmount": 6000,
+"loanAmount": 2400,
 "loanPeriod": 24,
 "errorMessage": null
 }

@@ -20,17 +20,17 @@ class DecisionEngineTest {
     @InjectMocks
     private DecisionEngine decisionEngine;
 
-    private Long debtorPersonalCode;
-    private Long segment1PersonalCode;
-    private Long segment2PersonalCode;
-    private Long segment3PersonalCode;
+    private String debtorPersonalCode;
+    private String segment1PersonalCode;
+    private String segment2PersonalCode;
+    private String segment3PersonalCode;
 
     @BeforeEach
     void setUp() {
-        debtorPersonalCode = 37605030299L;
-        segment1PersonalCode = 50307172740L;
-        segment2PersonalCode = 38411266610L;
-        segment3PersonalCode = 35006069515L;
+        debtorPersonalCode = "37605030299";
+        segment1PersonalCode = "50307172740";
+        segment2PersonalCode = "38411266610";
+        segment3PersonalCode = "35006069515";
     }
 
     @Test
@@ -65,7 +65,7 @@ class DecisionEngineTest {
 
     @Test
     void testInvalidPersonalCode() {
-        Long invalidPersonalCode = 12345678901L;
+        String invalidPersonalCode = "12345678901";
         assertThrows(InvalidPersonalCodeException.class,
                 () -> decisionEngine.calculateApprovedLoan(invalidPersonalCode, 4000L, 12));
     }

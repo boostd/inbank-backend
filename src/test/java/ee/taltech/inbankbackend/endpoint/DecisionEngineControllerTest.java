@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,9 +57,9 @@ public class DecisionEngineControllerTest {
             throws Exception, InvalidLoanPeriodException, NoValidLoanException, InvalidPersonalCodeException,
             InvalidLoanAmountException {
         Decision decision = new Decision(1000, 12, null);
-        when(decisionEngine.calculateApprovedLoan(anyLong(), anyLong(), anyInt())).thenReturn(decision);
+        when(decisionEngine.calculateApprovedLoan(anyString(), anyLong(), anyInt())).thenReturn(decision);
 
-        DecisionRequest request = new DecisionRequest(1234L, 10L, 10);
+        DecisionRequest request = new DecisionRequest("1234", 10L, 10);
 
         MvcResult result = mockMvc.perform(post("/loan/decision")
                         .content(objectMapper.writeValueAsString(request))
@@ -84,10 +85,10 @@ public class DecisionEngineControllerTest {
     public void givenInvalidPersonalCode_whenRequestDecision_thenReturnsBadRequest()
             throws Exception, InvalidLoanPeriodException, NoValidLoanException, InvalidPersonalCodeException,
             InvalidLoanAmountException {
-        when(decisionEngine.calculateApprovedLoan(anyLong(), anyLong(), anyInt()))
+        when(decisionEngine.calculateApprovedLoan(anyString(), anyLong(), anyInt()))
                 .thenThrow(new InvalidPersonalCodeException("Invalid personal code"));
 
-        DecisionRequest request = new DecisionRequest(1234L, 10L, 10);
+        DecisionRequest request = new DecisionRequest("1234", 10L, 10);
 
         MvcResult result = mockMvc.perform(post("/loan/decision")
                         .content(objectMapper.writeValueAsString(request))
@@ -113,10 +114,10 @@ public class DecisionEngineControllerTest {
     public void givenInvalidLoanAmount_whenRequestDecision_thenReturnsBadRequest()
             throws Exception, InvalidLoanPeriodException, NoValidLoanException, InvalidPersonalCodeException,
             InvalidLoanAmountException {
-        when(decisionEngine.calculateApprovedLoan(anyLong(), anyLong(), anyInt()))
+        when(decisionEngine.calculateApprovedLoan(anyString(), anyLong(), anyInt()))
                 .thenThrow(new InvalidLoanAmountException("Invalid loan amount"));
 
-        DecisionRequest request = new DecisionRequest(1234L, 10L, 10);
+        DecisionRequest request = new DecisionRequest("1234", 10L, 10);
 
         MvcResult result = mockMvc.perform(post("/loan/decision")
                         .content(objectMapper.writeValueAsString(request))
@@ -142,10 +143,10 @@ public class DecisionEngineControllerTest {
     public void givenInvalidLoanPeriod_whenRequestDecision_thenReturnsBadRequest()
             throws Exception, InvalidLoanPeriodException, NoValidLoanException, InvalidPersonalCodeException,
             InvalidLoanAmountException {
-        when(decisionEngine.calculateApprovedLoan(anyLong(), anyLong(), anyInt()))
+        when(decisionEngine.calculateApprovedLoan(anyString(), anyLong(), anyInt()))
                 .thenThrow(new InvalidLoanPeriodException("Invalid loan period"));
 
-        DecisionRequest request = new DecisionRequest(1234L, 10L, 10);
+        DecisionRequest request = new DecisionRequest("1234", 10L, 10);
 
         MvcResult result = mockMvc.perform(post("/loan/decision")
                         .content(objectMapper.writeValueAsString(request))
@@ -171,10 +172,10 @@ public class DecisionEngineControllerTest {
     public void givenNoValidLoan_whenRequestDecision_thenReturnsBadRequest()
             throws Exception, InvalidLoanPeriodException, NoValidLoanException, InvalidPersonalCodeException,
             InvalidLoanAmountException {
-        when(decisionEngine.calculateApprovedLoan(anyLong(), anyLong(), anyInt()))
+        when(decisionEngine.calculateApprovedLoan(anyString(), anyLong(), anyInt()))
                 .thenThrow(new NoValidLoanException("No valid loan available"));
 
-        DecisionRequest request = new DecisionRequest(1234L, 1000L, 12);
+        DecisionRequest request = new DecisionRequest("1234", 1000L, 12);
 
         MvcResult result = mockMvc.perform(post("/loan/decision")
                         .content(objectMapper.writeValueAsString(request))
@@ -200,9 +201,9 @@ public class DecisionEngineControllerTest {
     public void givenUnexpectedError_whenRequestDecision_thenReturnsInternalServerError()
             throws Exception, InvalidLoanPeriodException, NoValidLoanException, InvalidPersonalCodeException,
             InvalidLoanAmountException {
-        when(decisionEngine.calculateApprovedLoan(anyLong(), anyLong(), anyInt())).thenThrow(new RuntimeException());
+        when(decisionEngine.calculateApprovedLoan(anyString(), anyLong(), anyInt())).thenThrow(new RuntimeException());
 
-        DecisionRequest request = new DecisionRequest(1234L, 10L, 10);
+        DecisionRequest request = new DecisionRequest("1234", 10L, 10);
 
         MvcResult result = mockMvc.perform(post("/loan/decision")
                         .content(objectMapper.writeValueAsString(request))
